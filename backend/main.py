@@ -1,13 +1,14 @@
-from typing import Optional
-from pydantic import BaseModel
-from fastapi import FastAPI, File, UploadFile
 import shutil
 import easyocr
+from fastapi import FastAPI, File, UploadFile
+from utils.decorators import timer_func
+from spellchecker import SpellChecker
 
 app = FastAPI()
+reader = easyocr.Reader(['en'])
+spell = SpellChecker('en')
 
-class Image(BaseModel):
-    title: str
+CONFIDENCE_THRESHOLD = 80
 
 @app.get("/")
 def read_root():
@@ -23,18 +24,22 @@ def image_to_text(file: UploadFile = File(...)):
 
     return {"extracted_text": text}
 
-@app.get("/get-boards/{workspace-id}")
-def get_boards(workspace_id: int):
-    ''' This handle takes workspace id and returns the list of boards'''
+@app.get("/get-boards/")
+def get_boards():
+    '''This returns all the boards user has access to'''
     return {"boards": []}
 
 
+@timer_func
 def imageToText(image):
-    reader = easyocr.Reader(['en']) 
-    result = reader.readtext(image)
+    result = reader.readtext(image, paragraph=False, decoder="wordbeamsearch")
+    print(result)
     text = ''
-    for detection in result: 
-        text = text +" "+ detection[1]
-    return text
+    for detection in result:
+        word = detection[1]
+        if detection[2] < CONFIDENCE_THRESHOLD:
+            word = spell.correction(word)
 
+        text = text +" "+ word
+    return text
 
