@@ -42,5 +42,6 @@ def imageToText(image):
             word = spell.correction(word)
 
         text = text +" "+ word
+    text = text.strip()
     return text
 
