@@ -1,9 +1,12 @@
 package id.aashari.code.opencvrectangledetection;
 
+import android.content.Intent;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,8 +23,10 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     //image holder
     Mat bwIMG, hsvIMG, lrrIMG, urrIMG, dsIMG, usIMG, cIMG, hovIMG;
     MatOfPoint2f approxCurve;
-
+    boolean m_open_add_card_activity = false;
     int threshold;
 
     @Override
@@ -146,8 +151,20 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 if (numberVertices == 4 && mincos >= -0.1 && maxcos <= 0.3 && contourArea > 25000 ) {
                     //setLabel(dst, String.valueOf(contourArea), cnt);
                     Rect r = Imgproc.boundingRect(cnt);
-
-                    Imgproc.rectangle(dst,r.tl(), r.br(), new Scalar(255, 0, 0), 3);
+                    Imgproc.rectangle(dst,r.tl(), r.br(), new Scalar(255, 0, 0), 6);
+                    if (m_open_add_card_activity) {
+                        m_open_add_card_activity = false;
+                        File path = new File(Environment.getExternalStorageDirectory() + "/Images/");
+                        path.mkdirs();
+                        File file = new File(path, "image.png");
+                        String filename = file.toString();
+                        Imgcodecs imageCodecs = new Imgcodecs();
+                        Imgproc.cvtColor(dst, dst, Imgproc.COLOR_BGR2RGB);
+                        imageCodecs.imwrite(filename, dst);
+                        Intent intent = new Intent(this, AddCard.class);
+                        intent.putExtra("image_captured", dst.getNativeObjAddr());
+                        startActivity(intent);
+                    }
                 }
 
             }
@@ -202,6 +219,10 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         Rect r = Imgproc.boundingRect(contour);
         Point pt = new Point(r.x + ((r.width - text.width) / 2),r.y + ((r.height + text.height) / 2));
         Imgproc.putText(im, label, pt, fontface, scale, new Scalar(255, 0, 0), thickness);
+    }
+
+    public void addCard(View view) {
+        m_open_add_card_activity = true;
     }
 
 }
