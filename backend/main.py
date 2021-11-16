@@ -37,7 +37,8 @@ def imageToText(image):
     text = ''
     for detection in result:
         word = detection[1]
-        if detection[2] < CONFIDENCE_THRESHOLD:
+        # If confidence level is lesser than 80% run spell check on the word
+        if detection[2] * 100 < CONFIDENCE_THRESHOLD:
             word = spell.correction(word)
 
         text = text +" "+ word
