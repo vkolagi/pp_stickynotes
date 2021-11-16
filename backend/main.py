@@ -61,4 +61,4 @@ def getBoards():
     for boards in response.json():
         boardList.append((boards.get('name'), boards.get('id')))  #creates list of board and board-Id
 
-    return boardList # sample output::: {"boards":[[["Generac Pursuit",1094435],["board3",1308404],["new board",1308397]]]}
+    return boardList # sample output::: [["Generac Pursuit",1094435],["board3",1308404],["new board",1308397]]
