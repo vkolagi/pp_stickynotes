@@ -3,11 +3,17 @@ import easyocr
 from fastapi import FastAPI, File, UploadFile
 from utils.decorators import timer_func
 from spellchecker import SpellChecker
+import requests
+import json
+import configparser
+
+config = configparser.ConfigParser()
+config.read('settings.env')
+token = config.get('access-token', 'tempToken')
 
 app = FastAPI()
 reader = easyocr.Reader(['en'])
 spell = SpellChecker('en')
-
 CONFIDENCE_THRESHOLD = 80
 
 @app.get("/")
@@ -24,10 +30,10 @@ def image_to_text(file: UploadFile = File(...)):
 
     return {"extracted_text": text}
 
-@app.get("/get-boards/")
+@app.get("/get-boards")
 def get_boards():
-    '''This returns all the boards user has access to'''
-    return {"boards": []}
+    ''' This handle takes workspace id and returns the list of boards'''
+    return {"boards": [getBoards()]}
 
 
 @timer_func
@@ -45,3 +51,14 @@ def imageToText(image):
     text = text.strip()
     return text
 
+
+def getBoards():
+    session = requests.Session()
+    session.headers.update({'Authorization': f"Bearer {token}"})
+    response = session.get('https://service.projectplace.com/api/v1/user/me/boards')
+    boardList = []
+
+    for boards in response.json():
+        boardList.append((boards.get('name'), boards.get('id')))  #creates list of board and board-Id
+
+    return boardList # sample output::: {"boards":[[["Generac Pursuit",1094435],["board3",1308404],["new board",1308397]]]}
