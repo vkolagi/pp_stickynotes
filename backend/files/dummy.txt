@@ -1,0 +1,1 @@
+Checking in folder 'files' that will store the images after retrieving from client
