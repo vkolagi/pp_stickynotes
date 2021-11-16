@@ -8,9 +8,17 @@
 
     <ImageView
         android:id="@+id/imageViewPers"
-        android:layout_width="404dp"
-        android:layout_height="724dp"
-        tools:layout_editor_absoluteX="7dp"
-        tools:layout_editor_absoluteY="7dp"
+        android:layout_width="0dp"
+        android:layout_height="384dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="200dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 </android.support.constraint.ConstraintLayout>
