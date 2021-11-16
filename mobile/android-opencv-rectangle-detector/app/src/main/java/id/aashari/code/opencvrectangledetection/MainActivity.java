@@ -159,10 +159,10 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                         File file = new File(path, "image.png");
                         String filename = file.toString();
                         Imgcodecs imageCodecs = new Imgcodecs();
-                        Imgproc.cvtColor(dst, dst, Imgproc.COLOR_BGR2RGB);
-                        imageCodecs.imwrite(filename, dst);
+                        Mat tempImg = dst.clone();
+                        Imgproc.cvtColor(tempImg, tempImg, Imgproc.COLOR_BGR2RGB);
+                        imageCodecs.imwrite(filename, tempImg);
                         Intent intent = new Intent(this, AddCard.class);
-                        intent.putExtra("image_captured", dst.getNativeObjAddr());
                         startActivity(intent);
                     }
                 }

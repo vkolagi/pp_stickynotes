@@ -20,11 +20,6 @@ public class AddCard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_card2);
-
-        long address = getIntent().getLongExtra("image_captured", 0);
-        Mat tempImg = new Mat( address );
-        Mat img = tempImg.clone();
-
         File path = new File(Environment.getExternalStorageDirectory() + "/Images/");
         File imgFile = new File(path, "image.png");
         if(imgFile.exists()){
