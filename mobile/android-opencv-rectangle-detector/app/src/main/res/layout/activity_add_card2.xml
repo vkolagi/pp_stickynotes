@@ -26,6 +26,13 @@
         android:id="@+id/resultText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="176dp"
-        tools:layout_editor_absoluteY="598dp" />
+        android:layout_marginStart="176dp"
+        android:layout_marginTop="598dp"
+        android:layout_marginEnd="235dp"
+        android:layout_marginBottom="114dp"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

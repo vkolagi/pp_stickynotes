@@ -43,11 +43,10 @@ import okhttp3.MultipartBody;
 import okhttp3.MultipartBody.Builder;
 import org.opencv.imgcodecs.Imgcodecs;
 
+class GetImageResults implements Runnable {
+    private volatile String result = "";
 
 
-
-public class AddCard extends AppCompatActivity {
-    protected String m_resultText = "aa";
     public static String uploadImage(File file) {
 
         try {
@@ -82,6 +81,26 @@ public class AddCard extends AppCompatActivity {
         return "";
     }
 
+    @Override
+    public void run() {
+        final File path = new File(Environment.getExternalStorageDirectory() + "/Images/");
+        final File imgFileRot = new File(path, "image_rotated.jpg");
+        result  = uploadImage(imgFileRot);
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+}
+
+
+
+
+public class AddCard extends AppCompatActivity {
+    protected String m_resultText = "aa";
+
+
     private String saveToInternalStorage(Bitmap bitmapImage){
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         // path to /data/data/yourapp/app_data/imageDir
@@ -112,7 +131,6 @@ public class AddCard extends AppCompatActivity {
         setContentView(R.layout.activity_add_card2);
         final File path = new File(Environment.getExternalStorageDirectory() + "/Images/");
         final File imgFile = new File(path, "image.jpg");
-        TextView resultText = (TextView) findViewById(R.id.resultText);
         
         if(imgFile.exists()){
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
@@ -123,26 +141,24 @@ public class AddCard extends AppCompatActivity {
             ImageView myImage = (ImageView) findViewById(R.id.imageViewPers);
             myImage.setImageBitmap(rotatedBitmap);
             saveToInternalStorage(rotatedBitmap);
-
-
-            new Thread(new Runnable() {
-                private volatile String m_result= "";
-                public String getResult() {
-                    return m_result;
-                }
-                @Override
-                public void run() {
-                    final File imgFileRot = new File(path, "image_rotated.jpg");
-                    m_result  = uploadImage(imgFileRot);
-                    TextView resultText = (TextView) findViewById(R.id.resultText);
-                    /*try{
-                        resultText.setText(response);
-                    }
-                    catch (Throwable tx) {
-                        Log.e("err", "unexpected result");
-                    }*/
-                }
-            }).start();
+            GetImageResults getResults = new GetImageResults();
+            Thread res = new Thread(getResults);
+            res.start();
+            try {
+                res.join();
+            }
+            catch(InterruptedException e)
+            {
+                // this part is executed when an exception (in this example InterruptedException) occurs
+            }
+            String result = getResults.getResult();
+            TextView resultText = (TextView) findViewById(R.id.resultText);
+            try{
+                resultText.setText(result);
+            }
+            catch (Throwable tx) {
+                Log.e("err", "unexpected result");
+            }
 
 
         }
