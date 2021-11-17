@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                         File path = new File(Environment.getExternalStorageDirectory()
                                 + "/Images/");
                         path.mkdirs();
-                        File file = new File(path, "image.png");
+                        File file = new File(path, "image.jpg");
                         String filename = file.toString();
                         Imgcodecs imageCodecs = new Imgcodecs();
                         Mat tempImg = dst.clone();
