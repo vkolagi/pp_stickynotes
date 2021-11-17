@@ -388,6 +388,7 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
     protected void deliverAndDrawFrame(CvCameraViewFrame frame) {
         Mat modified;
 
+
         if (mListener != null) {
             modified = mListener.onCameraFrame(frame);
         } else {
@@ -408,7 +409,9 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
 
         if (bmpValid && mCacheBitmap != null) {
             Canvas canvas = getHolder().lockCanvas();
+            // Rotate canvas to 90 degrees
             if (canvas != null) {
+                canvas.rotate(90f, canvas.getWidth()/2, canvas.getHeight()/2);
                 canvas.drawColor(0, android.graphics.PorterDuff.Mode.CLEAR);
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "mStretch value: " + mScale);

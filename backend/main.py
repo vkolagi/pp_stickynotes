@@ -38,14 +38,15 @@ def get_boards():
 
 @timer_func
 def imageToText(image):
-    result = reader.readtext(image, paragraph=False, decoder="wordbeamsearch")
-    print(result)
+    import re
+    result = reader.readtext(image, paragraph=False, decoder="wordbeamsearch", batch_size=3)
     text = ''
     for detection in result:
         word = detection[1]
+        word = re.sub(' +', ' ', word)
         # If confidence level is lesser than 80% run spell check on the word
         if detection[2] * 100 < CONFIDENCE_THRESHOLD:
-            word = spell.correction(word)
+            word = " ".join([spell.correction(token) for token in word.split(" ")])
 
         text = text +" "+ word
     text = text.strip()
