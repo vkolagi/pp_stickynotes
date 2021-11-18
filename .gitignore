@@ -106,3 +106,4 @@ venv.bak/
 .mypy_cache/
 
 .idea/*
+mobile/android-opencv-rectangle-detector/openCVLibrary341/build/*
