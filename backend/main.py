@@ -36,6 +36,7 @@ def image_to_text(file: UploadFile = File(...)):
     with open(file_location, "wb+") as file_object:
         shutil.copyfileobj(file.file, file_object)
     text = imageToText(file_location)
+    postCard(text)
 
     return {"extracted_text": text}
 
@@ -47,7 +48,7 @@ def get_boards():
 @app.post("/post-ppCard")
 def post_projectPlace_card(card: Card):
     ''' This handle takes a projectId, boardId and card title and description for new card and posts a projectPlace card'''
-    response  = postCard(card.projectId, card.boardId, card.title, card.description)
+    response  = postCard(card.title, card.description, card.projectId, card.boardId)
     return response
 
 
@@ -78,11 +79,11 @@ def getBoards():
     for boards in response.json():
         boardList.append((boards.get('name'), f"boardId = {boards.get('id')}", f"projectId = {boards.get('project_id')}"))
 
-    return boardList 
+    return boardList
     # sample output::: [('Generac Pursuit', 'boardId = 1094435', 'projectId = 1127607142'), ('board3', 'boardId = 1308404', 'projectId = 1109821908')]
 
 
-def postCard(projectId, boardId, title, description):
+def postCard(title, description="Created by Sticky Notes APP", projectId="1205354070", boardId="1309186"):
     header = {"content-type": "application/json"}
     session = requests.Session()
     session.headers.update({'Authorization': f"Bearer {token}"})

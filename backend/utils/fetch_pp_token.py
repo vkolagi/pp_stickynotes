@@ -1,6 +1,12 @@
 ## Only if certificate is expired (which happens once in a year), Generate a localhost pem file and key file before executing
 ## Using this command (only once): openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out localhost.pem
-## Run this script from backend folder using sudo: sudo utils/fetch_pp_token.py
+
+''' First create an application in apidocs section of projectplace
+    Add the callback url as: https://127.0.0.1
+    Copy CLIENT_ID, CLIENT_SECRET and assign to respective variables in this file
+    Run this script from backend folder using sudo: sudo utils/fetch_pp_token.py
+    If things go well, this generates an access token and saves it in settings.env file
+'''
 
 import requests
 from urllib.parse import urlparse
