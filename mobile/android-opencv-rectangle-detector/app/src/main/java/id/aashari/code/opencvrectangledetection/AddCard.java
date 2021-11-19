@@ -1,47 +1,30 @@
 package id.aashari.code.opencvrectangledetection;
 
-import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
-import android.util.Property;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONObject;
-import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.UnknownHostException;
 
-
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.MultipartBody;
-import okhttp3.MultipartBody.Builder;
-import org.opencv.imgcodecs.Imgcodecs;
 
 class GetImageResults implements Runnable {
     private volatile String result = "";
@@ -59,7 +42,7 @@ class GetImageResults implements Runnable {
                             RequestBody.create(MEDIA_TYPE_PNG, file)).build();
 
             Request request = new Request.Builder()
-                    .url("http://192.168.1.240:8000/image-to-text")
+                    .url("http://192.168.1.23:8000/image-to-text")
                     .post(req)
                     .build();
 
