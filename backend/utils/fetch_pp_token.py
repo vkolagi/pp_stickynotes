@@ -39,8 +39,8 @@ def wait_for_request(server_class=HTTPServer,
     httpd.handle_request()
 
 ENV_URL = "https://api.projectplace.com"
-CLIENT_ID = "2be359af2c93f569b80adc91ac9a4e25"
-CLIENT_SECRET = "95ae97725e222744139079f94473a04a9bbd7984"
+CLIENT_ID = ""
+CLIENT_SECRET = ""
 RANDOM_STATE_STRING = "3482y34a"
 REDIRECT_URI = "https://127.0.0.1"
 
